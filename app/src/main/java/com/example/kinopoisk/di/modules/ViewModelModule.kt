@@ -3,7 +3,7 @@ package com.example.kinopoisk.di.modules
 import androidx.lifecycle.ViewModel
 import com.example.kinopoisk.di.ViewModelKey
 import com.example.kinopoisk.ui.dashboard.DashboardViewModel
-import com.example.kinopoisk.ui.home.HomeViewModel
+import com.example.kinopoisk.ui.home.MediaViewModel
 import com.example.kinopoisk.ui.notifications.NotificationsViewModel
 import dagger.Binds
 import dagger.Module
@@ -13,8 +13,8 @@ import dagger.multibindings.IntoMap
 interface ViewModelModule {
     @Binds
     @IntoMap
-    @ViewModelKey(HomeViewModel::class)
-    fun bindHomeViewModel(homeViewModel: HomeViewModel): ViewModel
+    @ViewModelKey(MediaViewModel::class)
+    fun bindHomeViewModel(mediaViewModel: MediaViewModel): ViewModel
 
     @Binds
     @IntoMap

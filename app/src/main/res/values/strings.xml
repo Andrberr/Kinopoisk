@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Kinopoisk</string>
-    <string name="title_home">Home</string>
+    <string name="app_name">Кинопоиск</string>
+    <string name="title_home">Медиа</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="media_text">Медиа</string>
+    <string name="now_in_cinema">Сегодня в кино</string>
 </resources>
