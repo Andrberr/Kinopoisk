@@ -2,7 +2,7 @@ package com.example.kinopoisk.data.models
 
 import com.squareup.moshi.Json
 
-data class FilmResponse(
+data class LongFilmResponse(
     @Json(name = "id") val id: Int? = null,
     @Json(name = "countries") val countries: List<NameResponse>? = null,
     @Json(name = "genres") val genres: List<NameResponse>? = null,
@@ -17,10 +17,3 @@ data class FilmResponse(
     @Json(name = "year") val year: Int? = null,
     @Json(name = "watchability") val watchability: WatchPlatformsResponse? = null
 )
-//    "releaseYears":[
-//    {
-//        "start":2023,
-//        "end":2023
-//    }
-//    ]
-//}

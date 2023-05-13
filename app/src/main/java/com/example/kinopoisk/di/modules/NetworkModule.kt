@@ -1,6 +1,7 @@
 package com.example.kinopoisk.di.modules
 
-import com.example.kinopoisk.data.network.MovieService
+import com.example.kinopoisk.data.network.NewFilmsService
+import com.example.kinopoisk.data.network.RatingFilmsService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -30,7 +31,13 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun getService(retrofit: Retrofit): MovieService = retrofit.create(MovieService::class.java)
+    fun getNewFilmsService(retrofit: Retrofit): NewFilmsService =
+        retrofit.create(NewFilmsService::class.java)
+
+    @Provides
+    @Singleton
+    fun getPopularFilmsService(retrofit: Retrofit): RatingFilmsService =
+        retrofit.create(RatingFilmsService::class.java)
 
     @Provides
     @Singleton

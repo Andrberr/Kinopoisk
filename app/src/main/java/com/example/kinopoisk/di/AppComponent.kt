@@ -5,6 +5,7 @@ import com.example.kinopoisk.di.modules.NetworkModule
 import com.example.kinopoisk.di.modules.RepositoryModule
 import com.example.kinopoisk.di.modules.ViewModelModule
 import com.example.kinopoisk.ui.MainActivity
+import com.example.kinopoisk.ui.home.MediaFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -18,4 +19,5 @@ interface AppComponent {
     }
 
     fun inject(activity: MainActivity)
+    fun inject(fragment: MediaFragment)
 }
