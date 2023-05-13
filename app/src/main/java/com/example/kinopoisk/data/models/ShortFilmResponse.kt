@@ -2,7 +2,7 @@ package com.example.kinopoisk.data.models
 
 import com.squareup.moshi.Json
 
-data class FilmResponse(
+data class ShortFilmResponse(
     @Json(name = "id") val id: Int? = null,
 //    @Json(name = "countries") val countries: List<NameResponse>? = null,
     @Json(name = "genres") val genres: List<NameResponse>? = null,

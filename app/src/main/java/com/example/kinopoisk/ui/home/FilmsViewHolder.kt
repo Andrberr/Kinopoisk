@@ -13,10 +13,6 @@ class FilmsViewHolder(
 
     fun onBind(shortFilm: ShortFilm) {
         with(binding) {
-//            val width = (posterView.measuredHeight * 0.3f).toInt()
-//            val layoutParams = posterView.layoutParams
-//            layoutParams.width = width
-//            posterView.layoutParams = layoutParams
 
             Glide.with(itemView.context)
                 .load(shortFilm.poster)

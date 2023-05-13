@@ -22,6 +22,7 @@ class MediaFragment : Fragment() {
     lateinit var factory: ViewModelFactory
     private val mediaViewModel: MediaViewModel by viewModels { factory }
 
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity?.application as KinopoiskApp).appComponent.inject(this)
@@ -48,6 +49,50 @@ class MediaFragment : Fragment() {
             newFilmsAdapter.setFilms(it)
         }
         mediaViewModel.getNewFilms()
+
+        val popularFilmsAdapter = FilmsAdapter()
+        binding.popularFilmsRecycler.apply {
+            adapter = popularFilmsAdapter
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        var currRating = ""
+        binding.ratingButton.setOnClickListener {
+            if (binding.findRatingText.text.isNotEmpty()) {
+                val rating = binding.findRatingText.text.toString()
+                val trueRating = checkForNumber(rating)
+                if (trueRating.isNotEmpty() && trueRating != currRating) {
+                    currRating = trueRating
+                    mediaViewModel.getPopularFilms(trueRating)
+                }
+            }
+        }
+
+        mediaViewModel.popularFilmsLiveData.observe(viewLifecycleOwner) {
+            popularFilmsAdapter.setFilms(it)
+        }
+    }
+
+    private fun checkForNumber(str: String): String {
+        try {
+            str.toInt()
+            return str
+        } catch (e: NumberFormatException) {
+            if (str[0] in '0'..'9') {
+                if (str[1] == '.') {
+                    var flag = true
+                    for (i in 2 until str.length) {
+                        if (str[i] !in '0'..'9') {
+                            flag = false
+                            break
+                        }
+                    }
+                    if (flag) return str.substring(0, 3)
+                }
+            }
+        }
+        return ""
     }
 
     override fun onDestroyView() {
