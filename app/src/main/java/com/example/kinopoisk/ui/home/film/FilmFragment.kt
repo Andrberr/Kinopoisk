@@ -1,21 +1,23 @@
 package com.example.kinopoisk.ui.home.film
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 import com.example.kinopoisk.KinopoiskApp
 import com.example.kinopoisk.R
 import com.example.kinopoisk.databinding.FragmentFilmBinding
+import com.example.kinopoisk.databinding.FragmentMoreInfoBinding
 import com.example.kinopoisk.di.ViewModelFactory
-import com.example.kinopoisk.ui.home.FilmsViewHolder
 import com.example.kinopoisk.ui.home.MediaViewModel
 import javax.inject.Inject
 
@@ -25,6 +27,8 @@ class FilmFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: FilmFragmentArgs by navArgs()
+
+    private var isUpdated = false;
 
     @Inject
     lateinit var factory: ViewModelFactory
@@ -39,6 +43,14 @@ class FilmFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val action = FilmFragmentDirections.actionFilmFragmentToMediaFragment()
+                    findNavController().navigate(action)
+                }
+            })
         _binding = FragmentFilmBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,32 +58,46 @@ class FilmFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mediaViewModel.filmLiveData.observe(viewLifecycleOwner) {
-            with(binding) {
-                Glide.with(requireContext())
-                    .load(it.poster)
-                    .into(posterView)
+            if (isUpdated) {
+                with(binding) {
+                    buttonMore.visibility = View.VISIBLE
+                    Glide.with(requireContext())
+                        .load(it.poster)
+                        .into(posterView)
 
-                filmNameView.text = it.name
-                ratingView.setBackgroundResource(
-                    if (it.rating >= GOOD_RATING) R.drawable.good_rating_background
-                    else if (it.rating >= NORM_RATING) R.drawable.norm_rating_background
-                    else R.drawable.bad_rating_background
-                )
-                ratingView.text = it.rating.toString()
+                    filmNameView.text = it.name
+                    ratingView.setBackgroundResource(
+                        if (it.rating >= GOOD_RATING) R.drawable.good_rating_background
+                        else if (it.rating >= NORM_RATING) R.drawable.norm_rating_background
+                        else R.drawable.bad_rating_background
+                    )
+                    ratingView.text = it.rating.toString()
 
-                var genres = ""
-                for (i in 0 until it.genres.size) {
-                    genres += it.genres[i] + "\n"
+                    var genres = ""
+                    for (i in 0 until it.genres.size) {
+                        genres += it.genres[i] + "\n"
+                    }
+                    yearGenresView.text = it.year.toString() + "\n" + genres
+
+                    var countries = "Длина: " + it.movieLength.toString() + "\n"
+                    for (i in 0 until it.countries.size) {
+                        countries += it.countries[i] + "\n"
+                    }
+                    countriesView.text = countries
+
+                    peopleWaitView.text = "Людей ждут: " + it.peopleWait
+                    votesAmountView.text = "Количество отзывов: " + it.votesAmount
+                    shortDescriptionView.text = it.shortDescription
+
+                    buttonMore.setOnClickListener {
+                        val action =
+                            FilmFragmentDirections.actionFilmFragmentToMoreInfoFragment(args.id)
+                        findNavController().navigate(action)
+                    }
                 }
-                yearGenresView.text = it.year.toString() + "\n" + genres
-
-                var countries = ""
-                for (i in 0..it.countries.size){
-                    countries+=it.countries[i] + "\n"
-                }
-                countriesLengthView
-            }
+            } else isUpdated = true
         }
+        if (mediaViewModel.filmLiveData.value == null) isUpdated = true
         mediaViewModel.getFilmInfo(args.id)
     }
 

@@ -23,7 +23,6 @@ class MediaFragment : Fragment() {
     lateinit var factory: ViewModelFactory
     private val mediaViewModel: MediaViewModel by viewModels { factory }
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity?.application as KinopoiskApp).appComponent.inject(this)

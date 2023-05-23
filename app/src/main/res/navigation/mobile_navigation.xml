@@ -13,20 +13,29 @@
 
         <action
             android:id="@+id/action_mediaFragment_to_filmFragment"
-            app:destination="@id/filmFragment" />
+            app:destination="@id/filmFragment"
+            app:enterAnim="@anim/slide_up"/>
 
     </fragment>
 
     <fragment
         android:id="@+id/filmFragment"
         android:name="com.example.kinopoisk.ui.home.film.FilmFragment"
-        android:label="fragment_film"
+        android:label="Информация о фильме"
         tools:layout="@layout/fragment_film">
 
         <argument
             android:name="id"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_filmFragment_to_moreInfoFragment"
+            app:destination="@id/moreInfoFragment"
+            app:enterAnim="@anim/slide_in_right"/>
+        <action
+            android:id="@+id/action_filmFragment_to_mediaFragment"
+            app:destination="@id/mediaFragment"
+            app:enterAnim="@anim/slide_down"/>
     </fragment>
 
     <fragment
@@ -40,5 +49,19 @@
         android:name="com.example.kinopoisk.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/moreInfoFragment"
+        android:name="com.example.kinopoisk.ui.home.film.MoreInfoFragment"
+        android:label="Описание фильма"
+        tools:layout="@layout/fragment_more_info">
+        <argument
+            android:name="id"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_moreInfoFragment_to_filmFragment"
+            app:destination="@id/filmFragment"
+            app:enterAnim="@anim/slide_in_left"/>
+    </fragment>
 
 </navigation>
