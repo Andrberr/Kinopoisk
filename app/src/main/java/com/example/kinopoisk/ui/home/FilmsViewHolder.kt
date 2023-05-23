@@ -8,7 +8,8 @@ import com.example.kinopoisk.databinding.FilmLayoutBinding
 import com.example.kinopoisk.domain.models.ShortFilm
 
 class FilmsViewHolder(
-    private val binding: FilmLayoutBinding
+    private val binding: FilmLayoutBinding,
+    private val itemClick: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(shortFilm: ShortFilm) {
@@ -29,6 +30,9 @@ class FilmsViewHolder(
                 )
                 ratingView.text = shortFilm.rating.toString()
             }
+        }
+        itemView.setOnClickListener {
+            itemClick.invoke(shortFilm.id)
         }
     }
 

@@ -1,9 +1,6 @@
 package com.example.kinopoisk.data.mappers
 
-import com.example.kinopoisk.data.models.LongFilmResponse
-import com.example.kinopoisk.data.models.ShortFilmResponse
-import com.example.kinopoisk.data.models.NameResponse
-import com.example.kinopoisk.data.models.WatchPlatformResponse
+import com.example.kinopoisk.data.models.*
 import com.example.kinopoisk.domain.models.LongFilm
 import com.example.kinopoisk.domain.models.ShortFilm
 import com.example.kinopoisk.domain.models.WatchPlatform
@@ -20,23 +17,30 @@ class FilmMapper @Inject constructor() {
         )
     }
 
-    fun mapToLongFilm(response: LongFilmResponse): LongFilm = with(response) {
-        LongFilm(
-            id = id ?: 0,
-            countries = countries?.map { it.value ?: "" } ?: emptyList(),
-            genre = getGenre(genres),
-            description = description ?: "",
-            enName = enName ?: "",
-            movieLength = movieLength ?: 0,
-            name = name ?: "",
-            poster = poster?.url ?: "",
-            rating = rating?.kp?.modify() ?: 0f,
-            shortDescription = shortDescription ?: "",
-            votesAmount = votes?.votesKp ?: 0,
-            peopleWait = votes?.await ?: 0,
-            year = year ?: 2000,
-            platforms = watchability?.items?.map { mapWatchPlatformItem(it) } ?: emptyList()
-        )
+    fun mapToLongFilm(response: LongResponse): LongFilm {
+        val list = response.data
+            ?: return LongFilm(
+                0, emptyList(), emptyList(), "", "", 0, "", "", 0f,
+                "", 0, 0, 0, emptyList()
+            )
+        return with(list[0]) {
+            LongFilm(
+                id = id ?: 0,
+                countries = countries?.map { it.value ?: "" } ?: emptyList(),
+                genres = genres?.map { it.value ?: "" } ?: emptyList(),
+                description = description ?: "",
+                enName = enName ?: "",
+                movieLength = movieLength ?: 0,
+                name = name ?: "",
+                poster = poster?.url ?: "",
+                rating = rating?.kp?.modify() ?: 0f,
+                shortDescription = shortDescription ?: "",
+                votesAmount = votes?.votesKp ?: 0,
+                peopleWait = votes?.await ?: 0,
+                year = year ?: 2000,
+                platforms = watchability?.items?.map { mapWatchPlatformItem(it) } ?: emptyList()
+            )
+        }
     }
 
     private fun mapWatchPlatformItem(item: WatchPlatformResponse): WatchPlatform = with(item) {

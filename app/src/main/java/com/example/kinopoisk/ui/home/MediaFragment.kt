@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kinopoisk.KinopoiskApp
-import com.example.kinopoisk.databinding.FragmentHomeBinding
+import com.example.kinopoisk.databinding.FragmentMediaBinding
 import com.example.kinopoisk.di.ViewModelFactory
 import javax.inject.Inject
 
 class MediaFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentMediaBinding? = null
     private val binding get() = _binding!!
 
     @Inject
@@ -33,12 +34,18 @@ class MediaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val newFilmsAdapter = FilmsAdapter()
+
+        val itemClick: (Int) -> Unit = {
+            val action = MediaFragmentDirections.actionMediaFragmentToFilmFragment(it)
+            findNavController().navigate(action)
+        }
+
+        val newFilmsAdapter = FilmsAdapter(itemClick)
         binding.newFilmsRecycler.apply {
             adapter = newFilmsAdapter
             layoutManager =
@@ -50,7 +57,7 @@ class MediaFragment : Fragment() {
         }
         mediaViewModel.getNewFilms()
 
-        val popularFilmsAdapter = FilmsAdapter()
+        val popularFilmsAdapter = FilmsAdapter(itemClick)
         binding.popularFilmsRecycler.apply {
             adapter = popularFilmsAdapter
             layoutManager =
@@ -64,12 +71,12 @@ class MediaFragment : Fragment() {
                 val trueRating = checkForNumber(rating)
                 if (trueRating.isNotEmpty() && trueRating != currRating) {
                     currRating = trueRating
-                    mediaViewModel.getPopularFilms(trueRating)
+                    mediaViewModel.getRatingFilms(trueRating)
                 }
             }
         }
 
-        mediaViewModel.popularFilmsLiveData.observe(viewLifecycleOwner) {
+        mediaViewModel.ratingFilmsLiveData.observe(viewLifecycleOwner) {
             popularFilmsAdapter.setFilms(it)
         }
     }

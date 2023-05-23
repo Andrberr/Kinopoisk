@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kinopoisk.domain.Repository
+import com.example.kinopoisk.domain.models.LongFilm
 import com.example.kinopoisk.domain.models.ShortFilm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,8 +18,11 @@ class MediaViewModel @Inject constructor(
     private val _newFilmsLiveData = MutableLiveData<List<ShortFilm>>()
     val newFilmsLiveData: LiveData<List<ShortFilm>> get() = _newFilmsLiveData
 
-    private val _popularFilmsLiveData = MutableLiveData<List<ShortFilm>>()
-    val popularFilmsLiveData: LiveData<List<ShortFilm>> get() = _popularFilmsLiveData
+    private val _ratingFilmsLiveData = MutableLiveData<List<ShortFilm>>()
+    val ratingFilmsLiveData: LiveData<List<ShortFilm>> get() = _ratingFilmsLiveData
+
+    private val _filmLiveData = MutableLiveData<LongFilm>()
+    val filmLiveData: LiveData<LongFilm> get() = _filmLiveData
 
     fun getNewFilms() {
         viewModelScope.launch {
@@ -26,13 +30,15 @@ class MediaViewModel @Inject constructor(
         }
     }
 
-    fun getPopularFilms(rating: String) {
+    fun getRatingFilms(rating: String) {
         viewModelScope.launch {
-            _popularFilmsLiveData.value = repository.getPopularFilms(rating)
+            _ratingFilmsLiveData.value = repository.getRatingFilms(rating)
         }
     }
 
-    companion object {
-        private const val FILMS_AMOUNT = 5
+    fun getFilmInfo(id: Int) {
+        viewModelScope.launch {
+            _filmLiveData.value = repository.getFilmInfo(id)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.kinopoisk.di.modules
 
+import com.example.kinopoisk.data.network.FilmInfoService
 import com.example.kinopoisk.data.network.NewFilmsService
 import com.example.kinopoisk.data.network.RatingFilmsService
 import com.squareup.moshi.Moshi
@@ -22,7 +23,7 @@ class NetworkModule {
             .add(KotlinJsonAdapterFactory())
             .build()
         return Retrofit.Builder()
-            .baseUrl("https://api.kinopoisk.dev/")
+            .baseUrl("https://api.kinopoisk.dev/v1.3/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(client)
             .build()
@@ -38,6 +39,11 @@ class NetworkModule {
     @Singleton
     fun getPopularFilmsService(retrofit: Retrofit): RatingFilmsService =
         retrofit.create(RatingFilmsService::class.java)
+
+    @Provides
+    @Singleton
+    fun getFilmInfoService(retrofit: Retrofit): FilmInfoService =
+        retrofit.create(FilmInfoService::class.java)
 
     @Provides
     @Singleton

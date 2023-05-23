@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface NewFilmsService {
     @Headers("X-API-KEY: 2Q9PWKM-TRNMNMB-PH0Z4JW-3Q3FJ7D")
-    @GET("v1.3/movie")
+    @GET("movie")
     suspend fun getMoviesResponse(
         @Query("page") page: Int,
         @Query("limit") limit: Int,
